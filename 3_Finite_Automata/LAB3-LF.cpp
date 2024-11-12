@@ -5,7 +5,7 @@
 #include <set>
 #include <map>
 #include <vector>
-
+#include <windows.h>
 using namespace std;
 
 struct FiniteAutomaton {
@@ -29,18 +29,18 @@ FiniteAutomaton parseFA(const string& filename) {
     while (getline(file, line)) {
         if (line.empty()) continue;
 
-        if (line == "#states") {
+        if (line == "states") {
             section = "states";
-        } else if (line == "#alphabet") {
+        } else if (line == "alphabet") {
             section = "alphabet";
-        } else if (line == "#transitions") {
+        } else if (line == "transitions") {
             section = "transitions";
-        } else if (line == "#initial") {
-            section = "initial";
-        } else if (line == "#final") {
-            section = "final";
+        } else if (line == "start") {
+            section = "start";
+        } else if (line == "end") {
+            section = "end";
         } else {
-            istringstream iss(line);
+            istringstream iss(line); // iss = {q0, q1, q2}
             if (section == "states") {
                 string state;
                 while (iss >> state) {
@@ -55,24 +55,16 @@ FiniteAutomaton parseFA(const string& filename) {
                 size_t commaPos = line.find(',');
                 size_t arrowPos = line.find("->");
 
-                if (commaPos != string::npos && arrowPos != std::string::npos) {
+                if (commaPos < line.size() && arrowPos < line.size() && commaPos < arrowPos) {
                     string src = line.substr(0, commaPos);
                     string symbol = line.substr(commaPos + 1, arrowPos - commaPos - 1);
                     string dest = line.substr(arrowPos + 2);
-
-                    src.erase(src.find_last_not_of(" \n\r\t") + 1);
-                    symbol.erase(symbol.find_last_not_of(" \n\r\t") + 1);
-                    dest.erase(dest.find_last_not_of(" \n\r\t") + 1);
-
+                    //cout << src << " "<< symbol << " " << dest<<endl;
                     fa.transitions[{src, symbol}].insert(dest);
-
-                    cerr << "Parsed transition: " << src << ", " << symbol << " -> " << dest << endl;
-                } else {
-                    cerr << "Error parsing transition: " << line << endl;
-                }
-            } else if (section == "initial") {
+                } 
+            } else if (section == "start") {
                 iss >> fa.initialState;
-            } else if (section == "final") {
+            } else if (section == "end") {
                 string finalState;
                 while (iss >> finalState) {
                     fa.finalStates.insert(finalState);
@@ -97,16 +89,16 @@ void displayFA(const FiniteAutomaton& fa) {
     for (const auto& transition : fa.transitions) {
         const pair<string, string>& key = transition.first;
         const set<string>& dests = transition.second;
-
-        cout << "  d(" << key.first << ", '" << key.second << "') -> ";
+        SetConsoleOutputCP(CP_UTF8);
+        cout <<  u8"δ" << "(" << key.first << ", '" << key.second << "') -> ";
         for (const auto& dest : dests) {
             cout << dest << " ";
         }
         cout << endl;
     }
 
-    cout << "Initial State: " << fa.initialState << endl;
-    cout << "Set of Final States: ";
+    cout << "Start State: " << fa.initialState << endl;
+    cout << "Set of End States: ";
     for (const auto& finalState : fa.finalStates) {
         cout << finalState << " ";
     }
