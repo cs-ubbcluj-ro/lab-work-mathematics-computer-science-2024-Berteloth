@@ -1,19 +1,28 @@
 <file> ::= <states_section> <alphabet_section> <transitions_section> <initial_section> <final_section>
 
-<states_section> ::= "#states" <state_list>
-<state_list> ::= <state> | <state> <state_list>
+<states_section> ::= "states" <state_list>
 
-<alphabet_section> ::= "#alphabet" <symbol_list>
-<symbol_list> ::= <symbol> | <symbol> <symbol_list>
+<state_list> ::= <state> { <state> }
 
-<transitions_section> ::= "#transitions" <transition_list>
-<transition_list> ::= <transition> | <transition> <transition_list>
+<alphabet_section> ::= "alphabet" <symbol_list>
+
+<symbol_list> ::= <symbol> { <symbol> }
+
+<transitions_section> ::= "transitions" <transition_list>
+
+<transition_list> ::= <transition> { <transition> }
+
 <transition> ::= <state> "," <symbol> "->" <state>
 
-<initial_section> ::= "#initial" <state>
+<initial_section> ::= "initial" <state>
 
-<final_section> ::= "#final" <state_list>
+<final_section> ::= "final" <state_list>
 
 <state> ::= <identifier>
 <symbol> ::= <identifier>
-<identifier> ::= any alphanumeric string
+
+<identifier> ::= <letter> { <letter> | <digit> }
+
+<letter> ::= "A" | "B" | ... | "Z" | "a" | "b" | ... | "z" ... |ASCII|
+
+<digit> ::= "0" | "1" | ... | "9"
