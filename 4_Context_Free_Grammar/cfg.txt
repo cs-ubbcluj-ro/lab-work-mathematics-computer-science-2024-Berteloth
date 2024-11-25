@@ -1,0 +1,58 @@
+Program ::= include_directive "int" "main" "(" ")" Block
+
+include_directive ::= "#include" "<" Identifier ">"
+
+Block ::= "{" StatementList "}"
+
+StatementList ::= Statement | Statement StatementList
+
+Statement ::= declaration_statement
+           | expression_statement
+           | io_statement
+           | compound_statement
+           | if_statement
+           | while_statement
+           | for_statement
+           | return_statement
+           | break_statement
+
+declaration_statement ::= type Identifier ["=" Expression] ";"
+
+type ::= "int" | "double" | "char" | "bool" | "long" | "long long"
+
+Identifier ::= Letter {Letter | Digit}
+
+Letter ::= "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+
+Digit ::= "0" | "1" | ... | "9"
+
+expression_statement ::= Expression ";"
+
+Expression ::= Term {Relation Term}
+
+Term ::= Factor {("*" | "/" | "%") Factor}
+
+Factor ::= Identifier | Constant | "(" Expression ")"
+
+Relation ::= "<" | "<=" | "=" | "!=" | ">=" | ">"
+
+Constant ::= int_constant | char_constant | string_constant
+
+int_constant ::= NonZeroDigit {Digit} | "0"
+
+NonZeroDigit ::= "1" | "2" | ... | "9"
+
+char_constant ::= "'" Letter "'"
+
+string_constant ::= '"' Letter {Letter} '"'
+
+io_statement ::= "cin" ">>" Identifier ";"
+              | "cout" "<<" Expression { "<<" "endl" } ";"
+
+if_statement ::= "if" "(" Expression ")" Statement ["else" Statement]
+
+while_statement ::= "while" "(" Expression ")" Statement
+
+return_statement ::= "return" [Expression] ";"
+
+break_statement ::= "break" ";"
