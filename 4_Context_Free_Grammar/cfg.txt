@@ -1,58 +1,68 @@
-Program ::= include_directive "int" "main" "(" ")" Block
+Alphabet
+Terminals
+    • Operators:  +, ->, *, /, %, =, ==, !=, , =, , = 
+    • Separators: [, ], (, ), {, }, ;, :, ?, ,
+    • Reserved Words: if, else, while, for, break, return, and, or, const, int, char, double, bool, cin, cout, void, namespace, std
+Non-Terminals
+    • Symbols like program, block, statement, expression represent syntactical rules.
 
-include_directive ::= "#include" "<" Identifier ">"
+Lexical Rules
 
-Block ::= "{" StatementList "}"
+Identifier -> Letter { Letter | Digit }
+Letter -> "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+Digit -> "0" | "1" | "2" | ... | "9"
+Zero -> "0"
+NonZero -> "1" | "2" | "3" | ... | "9"
+Constant -> Int | "-" NonZero { Digit }
+Int -> Zero | NonZero { Digit }
+Char -> Letter | Digit
+String -> Char { Char }
+RELATION -> "" | "=" | "=" | "!=" | "=" | ""
 
-StatementList ::= Statement | Statement StatementList
 
-Statement ::= declaration_statement
-           | expression_statement
-           | io_statement
-           | compound_statement
-           | if_statement
-           | while_statement
-           | for_statement
-           | return_statement
-           | break_statement
 
-declaration_statement ::= type Identifier ["=" Expression] ";"
+Syntactical Rules
 
-type ::= "int" | "double" | "char" | "bool" | "long" | "long long"
+Program -> {IncludeDirective} "int" "main" "(" ")" Block
 
-Identifier ::= Letter {Letter | Digit}
+IncludeDirective -> "#include" "" Identifier ""
 
-Letter ::= "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
+Block -> "{" StmtList "}"
 
-Digit ::= "0" | "1" | ... | "9"
+StmtList -> Stmt
+StmtList -> StmtList Stmt
 
-expression_statement ::= Expression ";"
+Stmt -> DeclStmt
+Stmt -> ExprStmt
+Stmt -> IOStmt
+Stmt -> CompoundStmt
+Stmt -> IfStmt
+Stmt -> WhileStmt
+Stmt -> ForStmt
+Stmt -> ReturnStmt
+Stmt -> BreakStmt
 
-Expression ::= Term {Relation Term}
+DeclStmt -> Type Identifier ["=" Expr] ";"
 
-Term ::= Factor {("*" | "/" | "%") Factor}
+Type -> "int" | "double" | "char" | "bool"
 
-Factor ::= Identifier | Constant | "(" Expression ")"
+ExprStmt -> Expr ";"
 
-Relation ::= "<" | "<=" | "=" | "!=" | ">=" | ">"
+Expr -> Term {Relation Term}
+Term -> Factor {("*" | "/" | "%") Factor}
+Factor -> Id | Const | "(" Expr ")"
 
-Constant ::= int_constant | char_constant | string_constant
+IOStmt -> "cin" "" Identifier | "cout" "" Expr { "" "endl" } ";"
 
-int_constant ::= NonZeroDigit {Digit} | "0"
+CompoundStmt -> "{" StmtList "}"
 
-NonZeroDigit ::= "1" | "2" | ... | "9"
+IfStmt -> "if" "(" Expr ")" Stmt ["else" Stmt]
 
-char_constant ::= "'" Letter "'"
+WhileStmt -> "while" "(" Expr ")" Stmt
 
-string_constant ::= '"' Letter {Letter} '"'
+ForStmt -> "for" "(" ExprStmt ExprStmt Expr ")" Stmt
 
-io_statement ::= "cin" ">>" Identifier ";"
-              | "cout" "<<" Expression { "<<" "endl" } ";"
+ReturnStmt -> "return" [Expr] ";"
 
-if_statement ::= "if" "(" Expression ")" Statement ["else" Statement]
+BreakStmt -> "break" ";"
 
-while_statement ::= "while" "(" Expression ")" Statement
-
-return_statement ::= "return" [Expression] ";"
-
-break_statement ::= "break" ";"
