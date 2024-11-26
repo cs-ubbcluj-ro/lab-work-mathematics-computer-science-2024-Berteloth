@@ -4,7 +4,7 @@ Terminals
     • Separators: [, ], (, ), {, }, ;, :, ?, ,
     • Reserved Words: if, else, while, for, break, return, and, or, const, int, char, double, bool, cin, cout, void, namespace, std
 Non-Terminals
-    • Symbols like program, block, statement, expression represent syntactical rules.
+    • Symbols like program, statement, expression represent syntactical rules.
 
 Lexical Rules
 
@@ -30,18 +30,18 @@ Program -> "#include" "<" Identifier ">" "int" "main" "(" ")" "{" StmtList "}"
 StmtList -> Stmt | StmtList Stmt | DeclStmt | ExprStmt | IOStmt | CompoundStmt | IfStmt | WhileStmt
 		| ForStmt | ReturnStmt | BreakStmt | epsilon
 
-//DeclStmt -> Type Identifier Init ";"
+DeclStmt -> Type Identifier Init ";"
 Init - > “=” Expr | ε 
 Type -> "int" | "double" | "char" | "bool"
 ExprStmt -> Expr ";"
 Expr -> Term Tail1
 Tail1 - > (“+” | “-”) Term | ε 
 Term -> Factor Tail2
-Tail2- > (“*” | “/” | “%”) | ε 
+Tail2- > (“*” | “/” | “%”) Factor | ε 
 Factor -> Identifier | Const | "(" Expr ")"
 IOStmt -> "cin" “>>” Identifier | “cout” “<<” Identifier ";"
 CompoundStmt -> "{" StmtList "}"
-IfStmt -> "if" "(" Expr ")" Stmt 
+IfStmt -> "if" "(" Expr ")" Stmt ElseStmt
 ElseStmt - > “else” Stmt | ε 
 WhileStmt -> "while" "(" Expr ")" Stmt
 ForStmt -> "for" "(" ExprStmt ExprStmt Expr ")" Stmt
