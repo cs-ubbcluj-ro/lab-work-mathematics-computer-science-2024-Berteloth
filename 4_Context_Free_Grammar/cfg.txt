@@ -1,6 +1,6 @@
 Alphabet
 Terminals
-    • Operators:  +, ->, *, /, %, =, ==, !=, , =, , = 
+    • Operators: + - * / % = == != < <= > >=
     • Separators: [, ], (, ), {, }, ;, :, ?, ,
     • Reserved Words: if, else, while, for, break, return, and, or, const, int, char, double, bool, cin, cout, void, namespace, std
 Non-Terminals
