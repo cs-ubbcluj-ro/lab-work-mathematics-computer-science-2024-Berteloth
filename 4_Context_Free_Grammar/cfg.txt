@@ -8,15 +8,17 @@ Non-Terminals
 
 Lexical Rules
 
-Identifier -> Letter { Letter | Digit }
+Identifier -> Letter Tail0
+Tail0 - > Letter Tail0 | Digit Tail0 | ε 
 Letter -> "A" | "B" | ... | "Z" | "a" | "b" | ... | "z"
 Digit -> "0" | "1" | "2" | ... | "9"
 Zero -> "0"
 NonZero -> "1" | "2" | "3" | ... | "9"
-Constant -> Int | "-" NonZero { Digit }
-Int -> Zero | NonZero { Digit }
+Constant -> Int | "-" NonZero  Digit 
+Int -> Zero | NonZero Digit 
 Char -> Letter | Digit
-String -> Char { Char }
+String -> Char TailC
+TailC - > Char | ε 
 RELATION -> "" | "=" | "=" | "!=" | "=" | ""
 
 
@@ -28,16 +30,21 @@ Program -> "#include" "<" Identifier ">" "int" "main" "(" ")" "{" StmtList "}"
 StmtList -> Stmt | StmtList Stmt | DeclStmt | ExprStmt | IOStmt | CompoundStmt | IfStmt | WhileStmt
 		| ForStmt | ReturnStmt | BreakStmt | epsilon
 
-DeclStmt -> Type Identifier ["=" Expr] ";"
+//DeclStmt -> Type Identifier Init ";"
+Init - > “=” Expr | ε 
 Type -> "int" | "double" | "char" | "bool"
 ExprStmt -> Expr ";"
-Expr -> Term {Relation Term}
-Term -> Factor {("*" | "/" | "%") Factor}
+Expr -> Term Tail1
+Tail1 - > (“+” | “-”) Term | ε 
+Term -> Factor Tail2
+Tail2- > (“*” | “/” | “%”) | ε 
 Factor -> Identifier | Const | "(" Expr ")"
-IOStmt -> "cin" "" Identifier | "cout" "" Expr { "" "endl" } ";"
+IOStmt -> "cin" “>>” Identifier | “cout” “<<” Identifier ";"
 CompoundStmt -> "{" StmtList "}"
-IfStmt -> "if" "(" Expr ")" Stmt ["else" Stmt | epsilon]
+IfStmt -> "if" "(" Expr ")" Stmt 
+ElseStmt - > “else” Stmt | ε 
 WhileStmt -> "while" "(" Expr ")" Stmt
 ForStmt -> "for" "(" ExprStmt ExprStmt Expr ")" Stmt
-ReturnStmt -> "return" [Expr] ";"
+ReturnStmt -> "return" value ";"
+value - > Expr | ε 
 BreakStmt -> "break" ";"
