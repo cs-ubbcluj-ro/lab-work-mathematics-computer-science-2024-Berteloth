@@ -23,46 +23,21 @@ RELATION -> "" | "=" | "=" | "!=" | "=" | ""
 
 Syntactical Rules
 
-Program -> {IncludeDirective} "int" "main" "(" ")" Block
+Program -> "#include" "<" Identifier ">" "int" "main" "(" ")" "{" StmtList "}"
 
-IncludeDirective -> "#include" "" Identifier ""
-
-Block -> "{" StmtList "}"
-
-StmtList -> Stmt
-StmtList -> StmtList Stmt
-
-Stmt -> DeclStmt
-Stmt -> ExprStmt
-Stmt -> IOStmt
-Stmt -> CompoundStmt
-Stmt -> IfStmt
-Stmt -> WhileStmt
-Stmt -> ForStmt
-Stmt -> ReturnStmt
-Stmt -> BreakStmt
+StmtList -> Stmt | StmtList Stmt | DeclStmt | ExprStmt | IOStmt | CompoundStmt | IfStmt | WhileStmt
+		| ForStmt | ReturnStmt | BreakStmt | epsilon
 
 DeclStmt -> Type Identifier ["=" Expr] ";"
-
 Type -> "int" | "double" | "char" | "bool"
-
 ExprStmt -> Expr ";"
-
 Expr -> Term {Relation Term}
 Term -> Factor {("*" | "/" | "%") Factor}
-Factor -> Id | Const | "(" Expr ")"
-
+Factor -> Identifier | Const | "(" Expr ")"
 IOStmt -> "cin" "" Identifier | "cout" "" Expr { "" "endl" } ";"
-
 CompoundStmt -> "{" StmtList "}"
-
-IfStmt -> "if" "(" Expr ")" Stmt ["else" Stmt]
-
+IfStmt -> "if" "(" Expr ")" Stmt ["else" Stmt | epsilon]
 WhileStmt -> "while" "(" Expr ")" Stmt
-
 ForStmt -> "for" "(" ExprStmt ExprStmt Expr ")" Stmt
-
 ReturnStmt -> "return" [Expr] ";"
-
 BreakStmt -> "break" ";"
-
