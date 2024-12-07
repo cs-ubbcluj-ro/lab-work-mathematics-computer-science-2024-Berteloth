@@ -37,7 +37,7 @@ ExprStmt -> Expr ";"
 Expr -> Term Tail1
 Tail1 - > (“+” | “-”) Term | ε 
 Term -> Factor Tail2
-Tail2- > (“*” | “/” | “%”) Factor | ε 
+Tail2- > (“*” | “/” | “%”) Factor Tail2 | ε 
 Factor -> Identifier | Const | "(" Expr ")"
 IOStmt -> "cin" “>>” Identifier | “cout” “<<” Identifier ";"
 CompoundStmt -> "{" StmtList "}"
